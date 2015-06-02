@@ -4,6 +4,8 @@ else
 ALTOR32_PATH ?= $(CURDIR)/../../
 endif
 
+SIMLIB_PATH ?= $(ALTOR32_PATH)/rtl/sim_lib
+
 # Default binary to load & run
 TEST_IMAGE  ?= test_image.bin  
 SIMARGS     ?=
@@ -30,10 +32,10 @@ TOP_MODULE = top
 ADDITIONAL_MODULES = $(ALTOR32_PATH)/rtl/$(RTL_CORE)/$(CORE_FILENAME)
 
 # CPP Source Files
-SRC_CPP = main.cpp top.cpp
+SRC_CPP = $(SIMLIB_PATH)/main.cpp $(SIMLIB_PATH)/top.cpp
 
 # Source directories
-INC_DIRS = -I$(ALTOR32_PATH)/rtl/$(RTL_CORE) -I$(ALTOR32_PATH)/rtl/soc -I$(ALTOR32_PATH)/rtl/peripheral
+INC_DIRS = -I$(ALTOR32_PATH)/rtl/$(RTL_CORE) -I$(ALTOR32_PATH)/rtl/soc -I$(ALTOR32_PATH)/rtl/peripheral -I$(SIMLIB_PATH)
 INC_DIRS_PURE = $(ALTOR32_PATH)/rtl/$(RTL_CORE) $(ALTOR32_PATH)/rtl/soc $(ALTOR32_PATH)/rtl/peripheral
 
 # Build directory
@@ -61,6 +63,6 @@ VERILATOR_OPTS += +define+SIMULATION+ --prefix altor32
 
 ALTOR32_LIB=$(BUILD_DIR)/altor32__ALL.a
 
-$(BUILD_DIR)/altor32__ALL.a: ram_dp8.v ram.v top.v | $(INC_DIRS_PURE)
-	verilator --cc $(TOP_MODULE).v $(ADDITIONAL_MODULES) $(SRC_CPP) $(INC_DIRS) +define+CONF_TARGET_SIM+ -Mdir $(BUILD_DIR) $(VERILATOR_OPTS)
+$(BUILD_DIR)/altor32__ALL.a: $(SIMLIB_PATH)/ram_dp8.v $(SIMLIB_PATH)/ram.v $(SIMLIB_PATH)/top.v | $(INC_DIRS_PURE)
+	verilator --cc $(SIMLIB_PATH)/$(TOP_MODULE).v $(ADDITIONAL_MODULES) $(SRC_CPP) $(INC_DIRS) +define+CONF_TARGET_SIM+ -Mdir $(BUILD_DIR) $(VERILATOR_OPTS)
 	$(MAKE) -C $(BUILD_DIR) -f altor32.mk altor32__ALL.a
