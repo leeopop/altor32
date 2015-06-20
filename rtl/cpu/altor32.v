@@ -83,7 +83,7 @@ parameter           BOOT_VECTOR         = 32'h00000000;
 parameter           ISR_VECTOR          = 32'h00000000;
 parameter           REGISTER_FILE_TYPE  = "SIMULATION";
 parameter           ENABLE_ICACHE       = "ENABLED";
-parameter           ENABLE_DCACHE       = "DISABLED";
+parameter           ENABLE_DCACHE       = "ENABLED";
 parameter           SUPPORT_32REGS      = "ENABLED";
 parameter           PIPELINED_FETCH     = "ENABLED";
 

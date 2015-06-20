@@ -48,7 +48,26 @@ module top
     // Break Output 
     output break_o,
     // Interrupt Input
-    input intr_i
+    input intr_i,
+
+output[31:0]          dmem_address,
+output[31:0]          dmem_data_w,
+input[31:0]          dmem_data_r,
+output[3:0]           dmem_sel,
+output[2:0]           dmem_cti,
+output                dmem_we,
+output                dmem_stb,
+output                dmem_cyc,
+input                dmem_ack,
+
+output[31:0]          imem_addr,
+input[31:0]          imem_data,
+output[3:0]           imem_sel,
+output                imem_stb,
+output                imem_cyc,
+output[2:0]           imem_cti,
+input                imem_ack,
+input imem_stall
 );
 
 //-----------------------------------------------------------------
@@ -69,58 +88,11 @@ wire                soc_stb;
 wire                soc_ack;
 wire                soc_irq;
 
-wire[31:0]          dmem_address;
-wire[31:0]          dmem_data_w;
-wire[31:0]          dmem_data_r;
-wire[3:0]           dmem_sel;
-wire[2:0]           dmem_cti;
-wire                dmem_we;
-wire                dmem_stb;
-wire                dmem_cyc;
-wire                dmem_stall;
-wire                dmem_ack;
-
-wire[31:0]          imem_addr;
-wire[31:0]          imem_data;
-wire[3:0]           imem_sel;
-wire                imem_stb;
-wire                imem_cyc;
-wire[2:0]           imem_cti;
-wire                imem_stall;
-wire                imem_ack;
-
 
 //-----------------------------------------------------------------
 // Instantiation
 //-----------------------------------------------------------------
 
-// BlockRAM
-ram  
-#(
-    .block_count(131072) // 1GB
-) 
-u_ram
-(
-    .clka_i(clk_i), 
-    .rsta_i(rst_i), 
-    .stba_i(imem_stb), 
-    .wea_i(1'b0), 
-    .sela_i(imem_sel), 
-    .addra_i(imem_addr[31:2]), 
-    .dataa_i(32'b0),
-    .dataa_o(imem_data),
-    .acka_o(imem_ack),
-
-    .clkb_i(clk_i), 
-    .rstb_i(rst_i), 
-    .stbb_i(dmem_stb), 
-    .web_i(dmem_we), 
-    .selb_i(dmem_sel), 
-    .addrb_i(dmem_address[31:2]), 
-    .datab_i(dmem_data_w),
-    .datab_o(dmem_data_r),
-    .ackb_o(dmem_ack)
-);
 
 // CPU
 cpu_if
@@ -149,7 +121,7 @@ u_cpu
     .imem0_cti_o(imem_cti),
     .imem0_cyc_o(imem_cyc),
     .imem0_stb_o(imem_stb),
-    .imem0_stall_i(1'b0),
+    .imem0_stall_i(imem_stall),
     .imem0_ack_i(imem_ack),
 
     // Data Memory 0 (0x10000000 - 0x10FFFFFF)
