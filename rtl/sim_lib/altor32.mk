@@ -61,8 +61,9 @@ endif
 
 VERILATOR_OPTS += +define+SIMULATION+ --prefix altor32
 
-ALTOR32_LIB=$(BUILD_DIR)/altor32__ALL.a
+ALTOR32_LIB=$(BUILD_DIR)/libaltor32.a
 
-$(BUILD_DIR)/altor32__ALL.a: $(SIMLIB_PATH)/ram_dp8.v $(SIMLIB_PATH)/ram.v $(SIMLIB_PATH)/top.v | $(INC_DIRS_PURE)
+$(BUILD_DIR)/libaltor32.a: $(SIMLIB_PATH)/ram_dp8.v $(SIMLIB_PATH)/ram.v $(SIMLIB_PATH)/top.v | $(INC_DIRS_PURE)
 	verilator --cc $(SIMLIB_PATH)/$(TOP_MODULE).v $(ADDITIONAL_MODULES) $(SRC_CPP) $(INC_DIRS) +define+CONF_TARGET_SIM+ -Mdir $(BUILD_DIR) $(VERILATOR_OPTS)
 	$(MAKE) -C $(BUILD_DIR) -f altor32.mk altor32__ALL.a
+	mv $(BUILD_DIR)/altor32__ALL.a $(BUILD_DIR)/libaltor32.a
