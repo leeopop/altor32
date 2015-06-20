@@ -97,7 +97,7 @@ wire                imem_ack;
 // BlockRAM
 ram  
 #(
-    .block_count(128) // 1MB
+    .block_count(131072) // 1GB
 ) 
 u_ram
 (
