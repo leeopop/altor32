@@ -66,9 +66,7 @@ output[3:0]           imem_sel,
 output                imem_stb,
 output                imem_cyc,
 output[2:0]           imem_cti,
-input                imem_ack,
-input imem_stall,
-input dmem_stall
+input                imem_ack
 );
 
 //-----------------------------------------------------------------
@@ -101,8 +99,8 @@ cpu_if
     .CLK_KHZ(CLK_KHZ),
     .BOOT_VECTOR(32'h10000000),
     .ISR_VECTOR(32'h10000000),
-    .ENABLE_ICACHE("ENABLED"),
-    .ENABLE_DCACHE("ENABLED"),
+    .ENABLE_ICACHE("DISABLED"),
+    .ENABLE_DCACHE("DISABLED"),
     .REGISTER_FILE_TYPE("SIMULATION")
 )
 u_cpu
@@ -122,7 +120,7 @@ u_cpu
     .imem0_cti_o(imem_cti),
     .imem0_cyc_o(imem_cyc),
     .imem0_stb_o(imem_stb),
-    .imem0_stall_i(imem_stall),
+    .imem0_stall_i(1'b0),
     .imem0_ack_i(imem_ack),
 
     // Data Memory 0 (0x10000000 - 0x10FFFFFF)
@@ -134,7 +132,7 @@ u_cpu
     .dmem0_cyc_o(dmem_cyc),
     .dmem0_we_o(dmem_we),
     .dmem0_stb_o(dmem_stb),
-    .dmem0_stall_i(dmem_stall),
+    .dmem0_stall_i(1'b0),
     .dmem0_ack_i(dmem_ack),
        
     // Data Memory 1 (0x11000000 - 0x11FFFFFF)
