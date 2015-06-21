@@ -67,7 +67,8 @@ output                imem_stb,
 output                imem_cyc,
 output[2:0]           imem_cti,
 input                imem_ack,
-input imem_stall
+input imem_stall,
+input dmem_stall
 );
 
 //-----------------------------------------------------------------
@@ -133,7 +134,7 @@ u_cpu
     .dmem0_cyc_o(dmem_cyc),
     .dmem0_we_o(dmem_we),
     .dmem0_stb_o(dmem_stb),
-    .dmem0_stall_i(1'b0),
+    .dmem0_stall_i(dmem_stall),
     .dmem0_ack_i(dmem_ack),
        
     // Data Memory 1 (0x11000000 - 0x11FFFFFF)
